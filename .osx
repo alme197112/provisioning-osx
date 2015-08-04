@@ -620,4 +620,4 @@ for app in "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" \
 done
 echo "Done. Note that some of these changes require a logout/restart to take effect."
 
-defaults write com.googlecode.iterm2 "New Bookmarks" -dict-add "Option Key Sends" 2
+/usr/libexec/PlistBuddy -c "Set :\"New Bookmarks\":0:\"Option Key Sends\" 2" ~/Library/Preferences/com.googlecode.iterm2.plist
