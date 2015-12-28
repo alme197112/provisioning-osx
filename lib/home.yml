@@ -17,6 +17,8 @@
     managed_bins_from_docker:
       - docker-daemon-on-machine-start
       - docker-openjdk-8-jdk
+    emacs_prelude_repo: https://github.com/bbatsov/prelude.git
+    emacs_prelude_dir: "{{ home_prefix }}/.emacs-prelude.d/.emacs.d"
 
   tasks:
 
@@ -41,6 +43,12 @@
         state=directory
       with_items: managed_dirs
 
+    - git:
+        repo={{ emacs_prelude_repo }} version=master
+        dest={{ emacs_prelude_dir }} remote=provisioning-osx
+        refspec=+refs/heads/master:refs/remotes/provisioning-osx/master
+      with_sequence: count=2 ## HACK Update ref then checkout.
+
     ## Binaries e.g. ~/bin/*
 
     - file:
@@ -60,12 +68,6 @@
         state=link
         src={{ docker_bin_dir }}/{{ item }}
       with_items: managed_bins_from_docker
-
-    ## Misc
-
-    - file:
-        path={{ home_prefix }}/dev/kerl/installations
-        state=directory
 
     ## Whitelist files and directories, logging suspicious ones
     ##
